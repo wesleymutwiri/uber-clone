@@ -12,6 +12,21 @@ coming soon
 5. Click on the live site on the github repository
 6. Alternatively, use the livelink found down below
 7. Other alternative:
+``` bash
+# clone into repository
+$ git clone
+# create a new virtual folder on your machine
+$ python3.6 -m venv virtual
+# Enter into the virtual file
+$ source virtual/bin/activate
+# install requirements needed by the file
+$ pip install -r requirements.txt
+# setup a newDjango application
+# get the secret_key from the application, create a file called .env and place it as such SECRET_KEY=''
+
+# run the application 
+$ python3.6 manage.py runserver
+```
 
 
 ## Known bugs
