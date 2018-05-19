@@ -8,5 +8,17 @@ def driver(request):
     return render(request, 'driver/driver.html')
 
 def driver_signup(request):
-    # if request.method
-    pass
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authentication(username=username, password=raw_password)
+            login(request, user)
+            return redirect('driver')
+        else:
+            form = SignUpForm()
+            return render(request, 'registration/signup.html', {'form': form})
+            
+    
