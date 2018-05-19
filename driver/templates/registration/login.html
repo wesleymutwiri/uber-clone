@@ -1,0 +1,29 @@
+{%extends 'registration/base.html'%} {%load bootstrap4 %} {%block content%}
+<div class="container col d-flex justify-content-center">
+    <div class="row">
+        <div class="col-md-6 col-lg-6 ">
+
+            <div class="card  " style="width: 18rem;">
+                <div class="card-header">
+                    <center>
+                        <h1>Hubber Uber</h1>
+                        <p>Sign In to Hubber Uber</p>
+
+                    </center>
+
+                </div>
+                <div class="card-body">
+                    <form action="" method="POST">
+                        {%csrf_token%} {%bootstrap_form form%}
+                        <button type="submit" class="btn btn-primary btn-block btn-lg">Sign in</button>
+                        Don't have an account?
+                        <a href="/signup">Signup</a>
+
+                        <input type="hidden" name="next" value="{{next}}">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{%endblock%}
