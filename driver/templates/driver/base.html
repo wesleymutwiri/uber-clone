@@ -8,14 +8,17 @@
 {%bootstrap_css%}
 <link rel="stylesheet" href="{%static 'css/driver.css'%}">
 <link href='https://api.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.css' rel='stylesheet' />
+<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v3.1.3/mapbox-gl-directions.css'
+type='text/css' />
 <script src='https://api.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.js'></script>
 {% endblock %}
 
 </head>
 <body>
-{%block content%}
-{% endblock %}
-{% block scripts %}
+    {%block content%}
+    {% endblock %}
+    {% block scripts %}
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v3.1.3/mapbox-gl-directions.js'></script>
 <script>
     mapboxgl.accessToken = 'pk.eyJ1Ijoid2VzbGV5bXV0d2lyaSIsImEiOiJjamhkaDl5NHkwcmI3Mzdxdjk3cmZjcm51In0.Zv9ADGkyMjl3wpL2sm_qLA';
     var map = new mapboxgl.Map({
@@ -23,6 +26,9 @@
         style: 'mapbox://styles/mapbox/streets-v10',
         
     });
+    map.addControl(new MapboxDirections({
+            accessToken: mapboxgl.accessToken
+        }), 'top-left');
 </script>
 
 
