@@ -19,6 +19,6 @@ def driver_signup(request):
             return redirect('driver')
         else:
             form = SignUpForm()
-            return render(request, 'registration/signup.html', {'form': form})
+        return render(request, 'registration/signup.html', {'form': form})
             
     
