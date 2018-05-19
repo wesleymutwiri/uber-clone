@@ -7,6 +7,8 @@
 {%block styles%}
 {%bootstrap_css%}
 <link rel="stylesheet" href="{%static 'css/driver.css'%}">
+<link href='https://api.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.css' rel='stylesheet' />
+<script src='https://api.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.js'></script>
 {% endblock %}
 
 </head>
@@ -14,6 +16,16 @@
 {%block content%}
 {% endblock %}
 {% block scripts %}
+<script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoid2VzbGV5bXV0d2lyaSIsImEiOiJjamhkaDl5NHkwcmI3Mzdxdjk3cmZjcm51In0.Zv9ADGkyMjl3wpL2sm_qLA';
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/streets-v10',
+        
+    });
+</script>
+
+
 <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/ScrollMagic.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/plugins/debug.addIndicators.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> {% bootstrap_javascript %} {% endblock %}

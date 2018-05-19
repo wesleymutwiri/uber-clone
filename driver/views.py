@@ -5,10 +5,20 @@ import datetime as dt
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
 from django.contrib.auth import login, authenticate
-
+import requests
 # Create your views here.
 def driver(request):
-    return render(request, 'driver/driver.html')
+    ip_address = request.META.get('HTTP_X_FORWARDED_FOR', '')
+    response = requests.get('http://freegeoip.net/json/%s' %ip_address)
+    geodata = response.json()
+    data = {
+        'ip': geodata['ip'],
+        'country': geodata['country_name'],
+        'latitude': geodata['latitude'],
+        'longitude': geodata['longitude'],
+        'api_key': 'AIzaSyDl-4iWCTsY4LCY4q3BgkJyZ_dzd5K-1aw',
+    }
+    return render(request, 'driver/driver.html', data)
 
 def driver_signup(request):
     # form = SignUpForm

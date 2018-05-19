@@ -1,4 +1,10 @@
 {%extends 'driver/base.html'%}
 {%block content%}
+<div id='map' style='width: 400px; height: 300px;' src="https://www.google.com/maps/embed/v1/view?center={{ latitude }},{{longitude}}&zoom=8&key=AIzaSyCTENT1YTyAXP8UJA_ZDO-GVvOTWZ0vcjQ"></div>
+<h2>GEO API </h2>
+<p>Your ip address is
+    <strong>{{ ip }}</strong>, and you are probably in
+    <strong>{{ country }}</strong> right now</p>
+
 Hello Driver
 {%endblock%}
