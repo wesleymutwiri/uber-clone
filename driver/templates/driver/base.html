@@ -272,6 +272,39 @@ map.on('load', function() {
         zoom: 4,
         placeholder: "Try: -40, 170"
     }));
+    service = new google.maps.places.PlacesService(map);
+        service.textSearch(request, callback);
+    var map;
+    var service;
+    var infowindow;
+
+    function initialize() {
+        var pyrmont = new google.maps;
+
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: pyrmont,
+            zoom: 15
+        });
+
+        var request = {
+            location: pyrmont,
+            radius: '500',  
+            query: 'restaurant'
+        };
+
+        service = new google.maps.places.PlacesService(map);
+        service.textSearch(request, callback);
+    }
+
+    function callback(results, status) {
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+            for (var i = 0; i < results.length; i++) {
+                var place = results[i];
+                createMarker(results[i]);
+            }
+        }
+    }
+
 </script>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTENT1YTyAXP8UJA_ZDO-GVvOTWZ0vcjQ&libraries=places"></script>
 <script src="http://maps.google.cn/maps/api/js?region=ke&language=en-CN&key=AIzaSyCTENT1YTyAXP8UJA_ZDO-GVvOTWZ0vcjQ">
