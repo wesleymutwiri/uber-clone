@@ -1,11 +1,13 @@
 {%load bootstrap4 %}
 {% load static %}
 <html>
-<head>
+    <head>
 <meta charset="utf-8">
 <title> Hubber Uber</title>
 {%block styles%}
 {%bootstrap_css%}
+<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.css'
+    type='text/css' />
 <link rel="stylesheet" href="{%static 'css/driver.css'%}">
 <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.45.0/mapbox-gl.js'></script>
 <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.45.0/mapbox-gl.css' rel='stylesheet' />
@@ -17,6 +19,7 @@
     {%block content%}
     {% endblock %}
     {% block scripts %}
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.min.js'></script>
     <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.min.js'></script>
     <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.css'
         type='text/css' />
@@ -193,6 +196,17 @@
                     }
                     
                 map.addControl(geocoder);
+                var layerList = document.getElementById('menu');
+                    var inputs = layerList.getElementsByTagName('input');
+
+                    function switchLayer(layer) {
+                        var layerId = layer.target.id;
+                        map.setStyle('mapbox://styles/mapbox/' + layerId + '-v9');
+                    }
+
+                    for (var i = 0; i < inputs.length; i++) {
+                        inputs[i].onclick = switchLayer;
+                    }
 
 // After the map style has loaded on the page, add a source layer and default
 // styling for a single point.
@@ -304,11 +318,15 @@ map.on('load', function() {
             }
         }
     }
+    map.addControl(new MapboxGeocoder({
+            accessToken: mapboxgl.accessToken
+        }));
 
 </script>
+<script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.min.js'></script>
+<link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.css'
+    type='text/css' />
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTENT1YTyAXP8UJA_ZDO-GVvOTWZ0vcjQ&libraries=places"></script>
-<script src="http://maps.google.cn/maps/api/js?region=ke&language=en-CN&key=AIzaSyCTENT1YTyAXP8UJA_ZDO-GVvOTWZ0vcjQ">
-</script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/ScrollMagic.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/plugins/debug.addIndicators.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> {% bootstrap_javascript %} {% endblock %}

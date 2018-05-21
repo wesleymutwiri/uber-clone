@@ -1,10 +1,20 @@
 {%extends 'driver/base.html'%}
 {%block content%}
-<div id='map' style='width: 1000px; height: 1000px;' src="https://www.google.com/maps/embed/v1/view?center={{ latitude }},{{longitude}}&zoom=8&key=AIzaSyCTENT1YTyAXP8UJA_ZDO-GVvOTWZ0vcjQ"></div>
-<h2>GEO API </h2>
-<p>Your ip address is
-    <strong>{{ ip }}</strong>, and you are probably in
-    <strong>{{ country }}</strong> right now</p>
+<div id='map' style='width: 1000px; height: 500px;' src="https://www.google.com/maps/embed/v1/view?center={{ latitude }},{{longitude}}&zoom=8&key=AIzaSyCTENT1YTyAXP8UJA_ZDO-GVvOTWZ0vcjQ"></div>
+<div id='menu'>
+    <input id='basic' type='radio' name='rtoggle' value='basic' checked='checked'>
+    <label for='basic'>basic</label>
+    <input id='streets' type='radio' name='rtoggle' value='streets'>
+    <label for='streets'>streets</label>
+    <input id='bright' type='radio' name='rtoggle' value='bright'>
+    <label for='bright'>bright</label>
+    <input id='light' type='radio' name='rtoggle' value='light'>
+    <label for='light'>light</label>
+    <input id='dark' type='radio' name='rtoggle' value='dark'>
+    <label for='dark'>dark</label>
+    <input id='satellite' type='radio' name='rtoggle' value='satellite'>
+    <label for='satellite'>satellite</label>
+</div>  
 
 Hello Driver
 {%endblock%}
