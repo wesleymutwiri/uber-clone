@@ -140,23 +140,142 @@
                     country: 'ke',
 
                     // further limit results to the geographic bounds representing the region of
-                    // New South Wales
-                    // apply a client side filter to further limit results to those strictly within
-                    // the New South Wales region
+                    
                     filter: function (item) {
                         // returns true if item contains New South Wales region
                         return item.context.map(function (i) {
                             // id is in the form {index}.{id} per https://github.com/mapbox/carmen/blob/master/carmen-geojson.md
                             // this example attempts to find the `region` named `New South Wales`
-                            return (i.id.split('.').shift() === 'region' && i.text === 'New South Wales');
+                            return (i.id.split('.').shift() === 'region' && i.text === 'Nairobi');
                         }).reduce(function (acc, cur) {
                             return acc || cur;
                         });
                     }
                 }));
+            map.addControl(new mapboxgl.NavigationControl());
+            map.dragRotate.disable();
+
+                // disable map rotation using touch rotation gesture
+            map.touchZoomRotate.disableRotation();
+
+            geojson.features.forEach(function (marker) {
+                    // create a DOM element for the marker
+                    var el = document.createElement('div');
+                    el.className = 'marker';
+                    el.style.backgroundImage = 'url(https://placekitten.com/g/' + marker.properties.iconSize.join('/') + '/)';
+                    el.style.width = marker.properties.iconSize[0] + 'px';
+                    el.style.height = marker.properties.iconSize[1] + 'px';
+
+                    el.addEventListener('click', function () {
+                        window.alert(marker.properties.message);
+                    });
+
+                    // add marker to map
+                    new mapboxgl.Marker(el)
+                        .setLngLat(marker.geometry.coordinates)
+                        .addTo(map);
+                });
+
+                map.addControl(geocoder);
+
+                    map.on('load', updateGeocoderProximity); // set proximity on map load
+                    map.on('moveend', updateGeocoderProximity); // and then update proximity each time the map moves
+
+                    function updateGeocoderProximity() {
+                        // proximity is designed for local scale, if the user is looking at the whole world,
+                        // it doesn't make sense to factor in the arbitrary centre of the map
+                        if (map.getZoom() > 9) {
+                            var center = map.getCenter().wrap(); // ensures the longitude falls within -180 to 180 as the Geocoding API doesn't accept values outside this range
+                            geocoder.setProximity({ longitude: center.lng, latitude: center.lat });
+                        } else {
+                            geocoder.setProximity(null);
+                        }
+                    }
+                    
+                map.addControl(geocoder);
+
+// After the map style has loaded on the page, add a source layer and default
+// styling for a single point.
+map.on('load', function() {
+    map.addSource('single-point', {
+        "type": "geojson",
+        "data": {
+            "type": "FeatureCollection",
+            "features": []
+        }
+    });
+
+    map.addLayer({
+        "id": "point",
+        "source": "single-point",
+        "type": "circle",
+        "paint": {
+            "circle-radius": 10,
+            "circle-color": "#007cbf"
+        }
+    });
+
+    // Listen for the `geocoder.input` event that is triggered when a user
+    // makes a selection and add a symbol that matches the result.
+    geocoder.on('result', function(ev) {
+        map.getSource('single-point').setData(ev.result.geometry);
+    });
+});
+
+    var coordinatesGeocoder = function (query) {
+        // match anything which looks like a decimal degrees coordinate pair
+        var matches = query.match(/^[ ]*(?:Lat: )?(-?\d+\.?\d*)[, ]+(?:Lng: )?(-?\d+\.?\d*)[ ]*$/i);
+        if (!matches) {
+            return null;
+        }
+
+        function coordinateFeature(lng, lat) {
+            return {
+                center: [lng, lat],
+                geometry: {
+                    type: "Point",
+                    coordinates: [lng, lat]
+                },
+                place_name: 'Lat: ' + lat + ', Lng: ' + lng, // eslint-disable-line camelcase
+                place_type: ['coordinate'], // eslint-disable-line camelcase
+                properties: {},
+                type: 'Feature'
+            };
+        }
+
+        var coord1 = Number(matches[1]);
+        var coord2 = Number(matches[2]);
+        var geocodes = [];
+
+        if (coord1 < -90 || coord1 > 90) {
+            // must be lng, lat
+            geocodes.push(coordinateFeature(coord1, coord2));
+        }
+
+        if (coord2 < -90 || coord2 > 90) {
+            // must be lat, lng
+            geocodes.push(coordinateFeature(coord2, coord1));
+        }
+
+        if (geocodes.length === 0) {
+            // else could be either lng, lat or lat, lng
+            geocodes.push(coordinateFeature(coord1, coord2));
+            geocodes.push(coordinateFeature(coord2, coord1));
+        }
+
+        return geocodes;
+    };
+
+    map.addControl(new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        localGeocoder: coordinatesGeocoder,
+        zoom: 4,
+        placeholder: "Try: -40, 170"
+    }));
 </script>
-
-
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTENT1YTyAXP8UJA_ZDO-GVvOTWZ0vcjQ&libraries=places"></script>
+<script src="http://maps.google.cn/maps/api/js?region=ke&language=en-CN&key=AIzaSyCTENT1YTyAXP8UJA_ZDO-GVvOTWZ0vcjQ">
+</script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/ScrollMagic.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.5/plugins/debug.addIndicators.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script> {% bootstrap_javascript %} {% endblock %}
