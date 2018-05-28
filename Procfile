@@ -1,1 +1,1 @@
-web: gunicorn uber-clone.wsgi
+web: gunicorn uber.wsgi
