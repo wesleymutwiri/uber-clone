@@ -7,7 +7,7 @@ django-appconf==1.0.2
 django-bootstrap4==0.0.6
 django-imagekit==4.0.2
 django-map-widgets==0.1.9
-django-registration==2.4.1
+django-registration==3.1.2
 gunicorn==19.8.1
 idna==2.6
 pilkit==2.0
